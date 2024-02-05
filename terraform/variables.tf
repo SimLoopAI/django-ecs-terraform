@@ -6,6 +6,11 @@ variable "region" {
 }
 
 
+variable "tf_bucket" {
+  description = "Terraform s3 bucket"
+  default     = "simloop-terraform"
+}
+
 # networking
 
 variable "public_subnet_1_cidr" {
@@ -48,7 +53,7 @@ variable "ecs_cluster_name" {
 
 variable "docker_image_url_django" {
   description = "Docker image to run in the ECS cluster"
-  default     = "<AWS_ACCOUNT_ID>.dkr.ecr.us-west-1.amazonaws.com/django-app:latest"
+  default     = "672505479933.dkr.ecr.us-west-1.amazonaws.com/django-app:latest"
 }
 
 variable "app_count" {
@@ -68,7 +73,7 @@ variable "fargate_memory" {
 
 variable "allowed_hosts" {
   description = "Domain name for allowed hosts"
-  default     = "YOUR DOMAIN NAME"
+  default     = "*"
 }
 
 
@@ -120,7 +125,7 @@ variable "rds_instance_class" {
 
 variable "certificate_arn" {
   description = "AWS Certificate Manager ARN for validated domain"
-  default     = "YOUR ARN"
+  default     = "arn:aws:acm:us-west-1:672505479933:certificate/c21eaddd-bd04-468b-b95a-e0d0f5c73994"
 }
 
 
@@ -128,5 +133,6 @@ variable "certificate_arn" {
 
 variable "docker_image_url_nginx" {
   description = "Docker image to run in the ECS cluster"
-  default     = "<AWS_ACCOUNT_ID>.dkr.ecr.us-west-1.amazonaws.com/nginx:latest"
+  default     = "672505479933.dkr.ecr.us-west-1.amazonaws.com/nginx:latest"
+
 }

@@ -2,20 +2,6 @@ resource "aws_ecs_cluster" "production" {
   name = "${var.ecs_cluster_name}-cluster"
 }
 
-data "template_file" "app" {
-  template = file("templates/django_app.json.tpl")
-
-  vars = {
-    docker_image_url_django = var.docker_image_url_django
-    docker_image_url_nginx  = var.docker_image_url_nginx
-    region                  = var.region
-    rds_db_name             = var.rds_db_name
-    rds_username            = var.rds_username
-    rds_password            = var.rds_password
-    rds_hostname            = aws_db_instance.production.address
-    allowed_hosts           = var.allowed_hosts
-  }
-}
 
 resource "aws_ecs_task_definition" "app" {
   family                   = "django-app"
@@ -26,7 +12,17 @@ resource "aws_ecs_task_definition" "app" {
   memory                   = "${var.fargate_memory}"
   execution_role_arn       = aws_iam_role.ecs-task-execution-role.arn
   task_role_arn            = aws_iam_role.ecs-task-execution-role.arn
-  container_definitions    = data.template_file.app.rendered
+  container_definitions = templatefile("templates/django_app.json.tpl", {
+    docker_image_url_django = var.docker_image_url_django
+    docker_image_url_nginx  = var.docker_image_url_nginx
+    region                  = var.region
+    rds_db_name             = var.rds_db_name
+    rds_username            = var.rds_username
+    rds_password            = var.rds_password
+    rds_hostname            = aws_db_instance.production.address
+    allowed_hosts           = var.allowed_hosts
+  })
+
   volume {
     name = "efs-volume"
     efs_volume_configuration {
